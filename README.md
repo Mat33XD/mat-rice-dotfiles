@@ -44,6 +44,7 @@ wl-clipboard
 nmcli
 bluez
 blueman
+expect
 pavucontrol
 ```
 ![preview](./screenshots/kitty.webp)
