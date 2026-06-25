@@ -1,0 +1,566 @@
+;<==============Left====================>
+(defwidget left-bar-widget []
+    (box 
+        :class "top-bar-widget top-bar-widget-left"
+        :orientation "h"
+        :spacing "2"
+        :space-evenly "false"
+        :halign "start"
+        :width 240
+        (button :class "top-bar-widget-left-element" :onclick "eww open bluetooth-window"
+            (label  :text "")
+        )
+        (button :class "top-bar-widget-left-element" :onclick "eww open wifi-window"
+            (label  :text "󱚻")
+        )
+        (button :class "top-bar-widget-left-element" :onclick "eww update music=$([ \"$(eww get music)\" = \"true\" ] && echo false || echo true)"
+            (label  :text "󰌳")
+        )
+        (eventbox
+            :onhover "eww update 'info=true'"
+            :onhoverlost "eww update 'info=false'"
+            (box
+                :class "content-info"
+                :space-evenly "false"
+                :spacing "0"
+                :orientation "h" 
+                :valign "start"
+                (button :class "info-button" :onclick "hyprctl dispatch exec resources"
+                    (label :text "")
+                )
+                (revealer
+                    :transition "slideleft"
+                    :reveal "${info}"
+                    :duration "0.37s"
+                    (box
+                        :class "info-revealer"
+                        :space-evenly "false"
+                        :spacing "20"
+                        :orientation "h"
+                        (label :text "${EWW_CPU.cores[0].usage}%")
+                        (label :text "${round(EWW_RAM.used_mem_perc, 0)}%")
+                        (label
+                            :text "${EWW_TEMPS.ACPITZ_TEMP1}${EWW_TEMPS.ACPITZ_TEMP1 > 70 ? '°C': 
+                            (EWW_TEMPS.ACPITZ_TEMP1 > 35 ? '°C' : '°C')}")
+                    )
+                )                
+            )
+        )
+    )
+)
+;_____________variables________
+(defvar info false)
+(defvar music false)
+(deflisten music-name "./scripts/music.sh")
+;--------------Musica--------------
+(defwidget musica []
+    (box
+        :class "top-bar-widget-element"
+        :space-evenly "false"
+        :spacing "10"
+        :orientation "h" 
+        :halign "center"
+        :valign "center"
+        :height 32
+        (button :class "top-bar-widget-button" :onclick "hyprctl dispatch exec kitty rmpc"
+            (label :text "")
+        )
+        (box
+            :space-evenly "false"
+            :spacing "5"
+            :orientation "h"
+            (label :limit-width "20" :text "${music-name}")
+            (button :class "top-bar-widget-button" :onclick "mpc prev"
+                (label :text "󰼨")
+            )
+            (button :class "top-bar-widget-button" :onclick "mpc toggle"
+                (label  :text "")
+            )
+            (button :class "top-bar-widget-button" :onclick "mpc next"
+                (label  :text "󰼧")
+            )
+        ) 
+    )
+)
+;----------------Workspace---------------------------
+(defwidget workspace []
+    (box
+        :class "workspace-box"
+        :space-evenly false
+        :spacing 10
+        :orientation "h"
+        :halign "start"
+        :valign "center"
+        (for ws in workspaces
+            (label
+                :text "${ws.icon}"
+                :class "${ws.active ? "active-workspace" : ""}"
+            )
+        )
+    )
+)
+
+;___________Variables___________
+(deflisten workspaces
+    :initial "[]"
+    "./scripts/workspace-listener.sh")
+;<==============Center====================>
+(defwidget center-bar-widget []
+    (box
+        :class "top-bar-widget"
+        :valign "center"
+        :halign "center"
+        :orientation "h" 
+        :space-evenly "true"
+        :spacing "15"
+        (label :text "${camera}")
+        (label :text "${formattime(EWW_TIME, "%H:%M")}")
+        (label :text "${mic}")
+    )
+)
+;_____________variables________
+(defpoll camera :interval "1s" "fuser /dev/video0 >/dev/null && echo '󰄀' || echo '󰗟'")
+(defpoll mic :interval "1s" "pactl list source-outputs | grep -q 'application.name' && echo '' || echo ''")
+;<==============Right====================>
+(defwidget right-bar-widget []
+    (box
+        :class "top-bar-widget"
+        :valign "start"
+        :halign "end"
+        :orientation "h" 
+        :space-evenly "false"
+        :spacing "20"
+        (button :class "top-bar-widget-button" :onclick "if eww active-windows | grep -q volume-window; then eww close volume-window; else eww open volume-window; fi"
+            (label :tooltip "Volumen" :text "${volume[0] >= 99 ? 100 : volume[0]}%${volume[1] == 'false' ? (volume[0] >= 70 ? '󰕾' : (volume[0] >= 1 ? '󰖀' : '󰕿')) : '󰝟'}")
+        )
+        (button :class "top-bar-widget-button" :onclick "if eww active-windows | grep -q brightness-window; then eww close brightness-window; else eww open brightness-window; fi"
+            (label :tooltip "Brillo" :text "${brightness >= 99 ? 100 : brightness}%󰃠 ")
+        )
+        (box :orientation "h" :space-evenly "false" :spacing "20" 
+            (label :text "${EWW_BATTERY.BAT1.capacity}%${matches(EWW_BATTERY, 'Charging') ?
+                  (EWW_BATTERY.BAT1.capacity == 100 ? '󰂅' 
+                : (EWW_BATTERY.BAT1.capacity >= 90 ? '󰂋' 
+                : (EWW_BATTERY.BAT1.capacity >= 80 ? '󰂊' 
+                : (EWW_BATTERY.BAT1.capacity >= 70 ? '󰢞' 
+                : (EWW_BATTERY.BAT1.capacity >= 60 ? '󰂉' 
+                : (EWW_BATTERY.BAT1.capacity >= 50 ? '󰢝' 
+                : (EWW_BATTERY.BAT1.capacity >= 40 ? '󰂈'
+                : (EWW_BATTERY.BAT1.capacity >= 30 ? '󰂇' 
+                : (EWW_BATTERY.BAT1.capacity >= 20 ? '󰂆'
+                : (EWW_BATTERY.BAT1.capacity >= 10 ? '󰢜'
+                : '󰢟'))))))))))
+                : (EWW_BATTERY.BAT1.capacity == 100 ? '󰁹'
+                : (EWW_BATTERY.BAT1.capacity >= 90 ? '󰂂' 
+                : (EWW_BATTERY.BAT1.capacity >= 80 ? '󰂁' 
+                : (EWW_BATTERY.BAT1.capacity >= 70 ? '󰂀'
+                : (EWW_BATTERY.BAT1.capacity >= 60 ? '󰁿' 
+                : (EWW_BATTERY.BAT1.capacity >= 50 ? '󰁾'
+                : (EWW_BATTERY.BAT1.capacity >= 40 ? '󰁽' 
+                : (EWW_BATTERY.BAT1.capacity >= 30 ? '󰁼'
+                : (EWW_BATTERY.BAT1.capacity >= 20 ? '󰁻' 
+                : (EWW_BATTERY.BAT1.capacity >= 10 ? '󰁺'
+                : '󰂎'))))))))))}"
+            )
+            (button :class "top-bar-widget-button top-bar-widget-button-power" :onclick "eww open power-window"
+                    (label :text "󰐦")
+            )
+        )
+    )   
+)
+
+;<-------------------Variables-------------------->
+(deflisten volume 'scripts/volume.sh')
+(deflisten brightness  'scripts/brightness.sh')
+;<======================volume and brigness=================================>
+(defwidget volume-widget []
+    (box
+        :orientation "v" 
+        :space-evenly "false"
+        :spacing "0"
+        (scale
+            :class "top-bar-widget-element-scale"
+            :orientation "v"
+            :flipped true
+            :round-digits: 0
+            :min 0
+            :max 100
+            :value {volume[0]}
+            :onchange "if [ {} -eq 0 ]; then
+                    pactl set-sink-mute @DEFAULT_SINK@ 1
+                else
+                    pactl set-sink-mute @DEFAULT_SINK@ 0
+                    pactl set-sink-volume @DEFAULT_SINK@ {}%
+                fi"
+        )
+        (button :class "top-bar-widget-button" :onclick "pavucontrol &"
+            (label :text "")
+        )
+    )
+)
+(defwidget brightness-widget []
+    (box
+        :orientation "v"
+        :spacing 0
+        :space-evenly false
+        (scale
+        :class "top-bar-widget-element-scale"
+        :min 0
+        :max 100
+        :round-digits 0
+        :flipped true
+        :orientation "v"
+        :value {brightness}
+        :onchange "brightnessctl set {}%"
+        )
+        (button :class "top-bar-widget-button" :onclick "if pgrep hyprsunset > /dev/null; then pkill hyprsunset; else hyprsunset -t 4500 & fi"
+            (label :text "󰈈")
+        )
+    )
+)
+;<===================Power Menu======================>
+(defwidget power-widget []
+    (revealer
+        :transition "crossfade"
+        :reveal true
+        :duration "0.5s"
+        (box 
+            (box
+                :space-evenly "true"
+                :spacing "20"
+                :orientation "v"
+                :halign "center"
+                :valign "center"
+                (button :class "top-bar-widget-button" :onclick "eww close power-window"
+                    (label :text "󰛉")
+                )            
+                (button :class "top-bar-widget-button" :onclick "systemctl suspend"
+                    (label :text "")
+                )
+                (button :class "top-bar-widget-button" :onclick "reboot"
+                    (label :text "󰑓")
+                )
+                (button :class "top-bar-widget-button" :onclick "poweroff"
+                    (label :text "")
+                )            
+            )
+        )
+    )
+)
+;<===================Wifi Menu======================>
+
+(defwidget wifi-widget []
+    (revealer
+        :transition "crossfade"
+        :reveal true
+        :duration "0.5s"
+        (box
+            :space-evenly "false"
+            :spacing "20"
+            :orientation "v"
+            :halign "center"
+            :valign "start"
+            (box
+                :space-evenly "false"
+                :spacing "65"
+                :orientation "h"
+                :halign "left"
+                :valign "end"
+                (box 
+                    :space-evenly "false"
+                    :spacing "10"
+                    :orientation "h"
+                    (label :text "WI-FI  ")
+                    (button :class "top-bar-widget-button" :onclick "nmcli networking off && nmcli networking on"
+                        (label :tooltip "Reiniciar Internet"  :text "󰑓")
+                    )
+                )
+                (button :class "top-bar-widget-button" :onclick "eww close wifi-window"
+                    (label :text "󰈆")
+                )                     
+            )
+            (revealer
+                :transition "slidedown"
+                :reveal "${wifi-name != "" ? true : false}"
+                :duration "0.8s"
+                (box
+                    :space-evenly "false"
+                    :spacing "0"
+                    :orientation "v"
+                    :halign "center"
+                    :valign "end"
+                    (label  :text "Conectado a  ")
+                    (box
+                        :space-evenly "false"
+                        :spacing "5"
+                        :orientation "v"
+                        :halign "center"
+                        :valign "end"
+                        (label :text "${wifi-name} 󱚻")
+                        (button :class "top-bar-widget-button" :onclick "bash ./scripts/wifi.sh disconnect"
+                            (label :text "Desconectar ")
+                        )                          
+                    )
+                )
+            )   
+            (box
+                :space-evenly "false"
+                :spacing "14"
+                :orientation "h"
+                :halign "center"
+                :valign "end"
+                (label :text "Redes Disponibles")
+                (button :class "top-bar-widget-button" :onclick "eww update wifi-scan=\"$(bash ./scripts/wifi.sh scan)\""
+                  (label :tooltip "Escanear Red" :text "󱛇")
+                )
+            )
+            (scroll
+                :vscroll true
+                :hscroll false
+                :class "scroll-window"
+                (box :orientation "v" :spacing "5"
+                    (for red in wifi-scan
+                        (box 
+                            :space-evenly "false"
+                            :spacing "5"
+                            :orientation "v"
+                            :halign "center"
+                            :valign "end"
+                            (label :text "${red} 󱚿")
+                            (box
+                                :space-evenly "false"
+                                :spacing "10"
+                                :orientation "v"
+                                :halign "center"
+                                :valign "end"
+                                (box
+                                    :space-evenly "false"
+                                    :spacing "2"
+                                    :orientation "h"
+                                    :halign "center"
+                                    :valign "end"
+                                    (input :onchange "eww update 'wifi-pass={}'")
+                                    (button :class "top-bar-widget-button" :onclick "bash -c 'bash ./scripts/wifi.sh connect \"${red}\" ${wifi-pass}'"
+                                        (label :tooltip "Conectar" :text "")
+                                    )                                
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    )
+)
+;--------------variables------------------------
+(defvar red "")
+(defvar wifi-pass "")
+(defvar wifi-scan "[]")
+(defpoll wifi-name :interval "10s" "LANG=C nmcli -t -f ACTIVE,SSID dev wifi | awk -F: '$1==\"yes\" {print $2; exit}'")
+;<=================== Bluetooth ==========================>
+(defwidget bluetooth-widget []
+    (revealer
+        :transition "crossfade"
+        :reveal true
+        :duration "0.5s"
+        (box
+            :space-evenly "false"
+            :spacing "20"
+            :orientation "v"
+            :halign "center"
+            :valign "start"
+            (box
+                :space-evenly "false"
+                :spacing "10"
+                :orientation "h"
+                :halign "center"
+                :valign "end"
+                (label :text "Bluetooth")
+                (button :class "top-bar-widget-button" :onclick "bash ./scripts/bluetooth.sh power"
+                    (label  :text "${bluetooth-state[0] == 'yes' ? 'on 󰂯' : 'off 󰂲' }")
+                )
+                (button :class "top-bar-widget-button" :onclick "bash ./scripts/bluetooth.sh reset"
+                    (label :tooltip "Reiniciar Bluetooth" :text "󰑓")
+                )
+                (button :class "top-bar-widget-button" :onclick "eww close bluetooth-window"
+                    (label :text "󰈆")
+                )                     
+            )
+            (revealer
+                :transition "slidedown"
+                :reveal "${bluetooth-state[1] != "" ? true : false}"
+                :duration "0.8s"
+                (box
+                    :space-evenly "false"
+                    :spacing "0"
+                    :orientation "v"
+                    :halign "center"
+                    :valign "end"
+                    (label  :text "Conectado a  ")
+                    (box
+                        :space-evenly "false"
+                        :spacing "5"
+                        :orientation "v"
+                        :halign "center"
+                        :valign "end"
+                        (label :text "${bluetooth-state[1]} 󱚻")
+                        (button :class "top-bar-widget-button" :onclick "bash ./scripts/bluetooth.sh disconnect"
+                            (label :text "Desconectar ")
+                        )                          
+                    )
+                )
+            )  
+            (box
+                :space-evenly "false"
+                :spacing "14"
+                :orientation "v"
+                :halign "center"
+                :valign "end"
+                (label :text "Buscar Dispositivo")
+                (button :class "top-bar-widget-button" :onclick "bash ./scripts/bluetooth.sh scan"
+                    (label :text "${bluetooth-scanning ? '󰑐 Escaneando...' : '󰂰 Escanear'}")
+                )
+            )
+            (scroll
+                :vscroll true
+                :hscroll false
+                :class "scroll-window"
+                (box :orientation "v" :spacing "5" :space-evenly "false"
+                    (for device in bluetooth-scan
+                        (box 
+                            :space-evenly "false"
+                            :spacing "10"
+                            :orientation "h"
+                            :halign "center"
+                            (label :limit-width "20" :text "${device}")
+                            (button :class "top-bar-widget-button" :onclick "bash ./scripts/bluetooth.sh connect \"${device}\""
+                                (label :tooltip "Emparejar" :text "")
+                            )                                
+                        )
+                    )
+                )
+            )
+            (button :class "top-bar-widget-button" :onclick "blueman-manager &"
+                (label :text "Mas Detalles 󰂳")
+            )
+        )
+    )
+)
+;<----------------Variables--------------------->
+(defvar bluetooth-scanning false)
+(defvar bluetooth-scan "[]")
+(deflisten bluetooth-state :initial '["not",""]' "bash ./scripts/bluetooth-listener.sh")
+;<==============Content-Bar====================>
+(defwidget top-bar-widget []
+    (centerbox
+        :orientation "h"
+        :vexpand "false"
+        (box
+            :orientation "h"
+            :spacing "0"
+            :space-evenly "false"
+            (left-bar-widget)
+            (revealer
+                :transition "crossfade"
+                :reveal "${music}"
+                :duration "0.5s"
+                (musica)
+            )  
+        )
+        (box
+            :orientation "h"
+            :spacing "0"
+            :space-evenly "false"
+            :valign "center"
+            (center-bar-widget)
+        )
+        (box
+            :orientation "h"
+            :spacing "10"
+            :space-evenly "false"
+            :halign "end"
+            (revealer
+                :transition "crossfade"
+                :reveal "${listen-workspace}"
+                :duration "0.5s"
+                (workspace)
+            )
+            (right-bar-widget)
+        )
+    )
+)
+;-------------Variable listen workspace-------------------
+(deflisten listen-workspace
+    :initial false
+    "./scripts/listen-workspace.sh")
+;<==============Window====================>
+(defwindow top-bar-window
+            :monitor 0
+            :geometry (geometry :x "0%"
+                               :y "0px"
+                               :width "100%"
+                               :height "30px"
+                               :anchor "top center")
+            :stacking "fg"  
+            :exclusive "true"
+            :focusable "false"
+            (top-bar-widget))
+
+(defwindow power-window
+            :monitor 0
+            :geometry (geometry :x "25px"
+                                :y "15px"
+                                :width "50px"
+                                :height "70px"
+                                :anchor "right top")
+            :stacking "fg"
+            :exclusive "false"
+            :focusable "false"
+            (power-widget))
+
+(defwindow wifi-window
+            :monitor 0
+            :geometry (geometry :x "40px"
+                                :y "10px"
+                                :width "250px"
+                                :height "350px"
+                                :anchor "left top")
+            :stacking "fg"
+            :exclusive "false"
+            :focusable "true"
+            (wifi-widget))
+
+(defwindow bluetooth-window
+            :monitor 0
+            :geometry (geometry :x "5px"
+                                :y "10px"
+                                :width "250px"
+                                :height "350px"
+                                :anchor "left top")
+            :stacking "fg"
+            :exclusive "false"
+            :focusable "false"
+            (bluetooth-widget))
+
+(defwindow volume-window
+            :monitor 0
+            :geometry (geometry :x "248px"
+                                :y "10px"
+                                :width "50px"
+                                :height "150px"
+                                :anchor "right top")
+            :stacking "fg"
+            :exclusive "false"
+            :focusable "false"
+            (volume-widget))
+
+(defwindow brightness-window
+            :monitor 0
+            :geometry (geometry :x "174px"
+                                :y "10px"
+                                :width "50px"
+                                :height "150px"
+                                :anchor "right top")
+            :stacking "fg"
+            :exclusive "false"
+            :focusable "false"
+            (brightness-widget))

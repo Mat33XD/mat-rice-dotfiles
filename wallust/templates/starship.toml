@@ -1,0 +1,46 @@
+format = """
+[█](fg:{{color0}} bg:{{color0}})\
+$username\
+[](fg:{{color0}} bg:{{color1}})\
+$directory\
+[](fg:{{color1}} bg:{{color2}})\
+$git_branch\
+[](fg:{{color2}})
+[█](fg:{{color3}} bg:{{color3}})\
+$status\
+[](fg:{{color3}} bg:{{color4}})\
+$cmd_duration\
+[](fg:{{color4}} bg:{{color5}})\
+[](fg:{{color5}})\
+[ ](bg:none)
+"""
+
+add_newline = true
+
+[username]
+show_always = true
+style_user = "bg:{{color0}} fg:{{foreground}} bold"
+format = "[  $user ]($style)"
+
+[directory]
+style = "bg:{{color1}} fg:{{foreground}} bold"
+format = "[  $path ]($style)"
+truncation_length = 2
+truncate_to_repo = true
+
+[git_branch]
+symbol = ""
+style = "bg:{{color2}} fg:{{foreground}} bold"
+format = "[ $symbol $branch ]($style)"
+
+[cmd_duration]
+min_time = 500
+style = "bg:{{color4}} fg:{{foreground}} bold"
+format = "[ ⏱ $duration ]($style)"
+
+[status]
+disabled = false
+success_symbol = "Nice"
+symbol = "Nasty"
+format = "[ ✦ $symbol ]($style)"
+style = "bg:{{color3}} fg:{{foreground}} bold"

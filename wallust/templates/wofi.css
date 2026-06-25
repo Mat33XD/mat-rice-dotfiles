@@ -1,0 +1,43 @@
+window {
+    background-color: transparent;
+}
+
+#input {
+    background-color: {{background}};
+    color: {{foreground}};
+    border: 2px solid {{color4}};
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+#inner-box {
+    background-color: {{color0}};
+    color: {{foreground}};
+    border: 2px solid {{color6}};
+    border-radius: 0px;
+    padding: 10px;
+    border-bottom: none;
+    border-top: none;
+}
+
+#scroll {
+    background-color: {{color0}};
+    color: {{foreground}};
+    border: 3px solid {{color6}};
+    border-radius: 10px;
+    padding: 10px;
+    border-left: none;
+    border-right: none;
+}
+
+#entry:selected {
+    background-color: {{color1}};
+    border: none;
+    outline: none;
+    border-radius: 2px;
+}
+
+image {
+    padding: 8px;
+    margin-right: 6px;
+}

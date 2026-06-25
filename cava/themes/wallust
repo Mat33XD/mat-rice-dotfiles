@@ -1,0 +1,18 @@
+[color]
+background = 'default'
+foreground = 'default'
+
+gradient = 1
+gradient_color_1 = '#3D6A6E'
+gradient_color_2 = '#47A895'
+gradient_color_3 = '#B0FFFE'
+
+horizontal_gradient = 1
+horizontal_gradient_color_1 = '#3D6A6E'
+horizontal_gradient_color_2 = '#817082'
+horizontal_gradient_color_3 = '#EE496B'
+horizontal_gradient_color_4 = '#47A895'
+horizontal_gradient_color_5 = '#CED0DF'
+horizontal_gradient_color_6 = '#B0FFFE'
+horizontal_gradient_color_7 = '#CFF7F6'
+horizontal_gradient_color_8 = '#91ADAC'

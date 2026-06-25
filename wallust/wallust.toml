@@ -1,0 +1,13 @@
+backend = "fastresize"
+color_space = "lch"
+palette = "dark"
+
+[templates]
+hypr = { template = 'hyprland.conf', target = '~/.config/hypr/colors.conf' }
+eww     = { template = 'eww.scss',     target = '~/.config/eww/colors-wallust.scss' }
+wofi = { template = 'wofi.css', target = '~/.config/wofi/style.css' }
+kitty = { template = 'kitty.conf', target = '~/.config/kitty/colors.conf' }
+starship = { template = "starship.toml", target = "~/.config/starship.toml" }
+mako = { template = "mako.sh", target = "~/.config/mako/config" }
+cava = { template = "cava", target = "~/.config/cava/themes/wallust" }
+fastfetch = { template = "fastfetch.jsonc", target = "~/.config/fastfetch/config.jsonc" }

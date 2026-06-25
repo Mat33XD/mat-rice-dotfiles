@@ -1,0 +1,165 @@
+@import "colors-wallust.scss";
+
+.top-bar-window {
+    background-color: transparent;
+}
+
+.top-bar-widget {
+    background-color: $background;
+    color: $foreground;
+    font-size: larger;
+    font-weight: 500;
+    border-bottom: solid 2px $color0;
+    border-radius: 10px;
+    padding: 2px 10px;
+}
+
+.top-bar-widget-left {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+.top-bar-widget-element {
+    background-color: $background;
+    color: $foreground;
+    border: solid 2px $color0;
+    border-radius: 10px;
+    border-bottom: none;
+    border-top: none;
+    padding: 0px 2px 0px 6px;
+    margin: 0px; 
+}
+
+.top-bar-widget-left-element {
+    background-color: $background ;
+    padding: 0px 8px 0px 5px;
+    border: solid 2px $color0;
+    border-radius: 0px 0px 10px 10px;
+    border-top: none;
+}
+
+.content-info {
+    background-color: $background ;
+    padding: 0px 6px 0px 5px;
+    border: solid 2px $color0;
+    border-radius: 0px 0px 10px 10px;
+    border-top: none;
+    min-height: 32px;
+}
+
+.info-button {
+    border: none;
+    font-size:xx-large;
+    font-weight: 400;
+    background-color: transparent;
+    padding: 0px 5px 0px 2px;
+}
+
+.info-revealer {
+    padding-left: 10px;
+}
+
+.top-bar-widget-button {
+    border: none;
+    border-radius: 10px;
+    color: $foreground;
+    padding: 2px 4px;
+    margin: 0px;
+}
+
+.top-bar-widget-button-power {
+    border: solid 2px $color0;
+    border-top: none;
+    border-radius: 10px;
+    padding: 0px 30px;
+    margin: 0px;
+}
+
+.power-window {
+    background-color: $background;
+    color: $foreground;
+    font-size: larger;
+    font-weight: 600;
+    border-bottom: solid 2px $color0;
+    border-top: solid 2px $color0;
+    border-radius: 10px;
+    padding: 14px 10px;
+}
+
+.bluetooth-window {
+    background-color: $background;
+    color: $foreground;
+    font-size: larger;
+    font-weight: 600;
+    border-bottom: solid 2px $color0;
+    border-top: solid 2px $color0;
+    border-radius: 10px;
+    padding: 10px 10px;
+}
+
+.wifi-window {
+    background-color: $background;
+    color: $foreground;
+    font-size: larger;
+    font-weight: 600;
+    border-bottom: solid 2px $color0;
+    border-top: solid 2px $color0;
+    border-radius: 10px;
+    padding: 10px 10px 0px 10px;
+}
+
+.scroll-window {
+    min-height: 140px;
+}
+
+.second-bar-window {
+    padding: 5px 25px 5px 25px;
+    border-radius: 20px;
+}
+
+.left-bar-widget {
+    background-color: transparent;
+}
+
+.volume-window {
+    border-radius: 10px;   
+}
+
+.brightness-window {
+    border-radius: 10px;
+}
+
+scale trough {
+    min-width: 4px;
+}
+
+scale slider {
+    min-width: 12px;
+    min-height: 12px;
+}
+
+scale trough highlight {
+  background-color: $color4;
+}
+
+scale {
+    min-height: 100px;
+}
+
+.workspace-box {
+    background-color: $background;
+    color: $color2;
+    border: solid 2px $color0;
+    border-radius: 10px;
+    border-bottom: none;
+    border-top: none;
+    padding: 0px 2px 0px 6px;
+    margin: 0px; 
+    min-width: 100px;
+    min-height: 30px;
+}
+
+.active-workspace {
+    color: $foreground;
+}
