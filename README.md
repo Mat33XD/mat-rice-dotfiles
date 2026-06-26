@@ -17,6 +17,12 @@
 - Starship (shell prompt)
 - Wallust (dynamic color generation)
 
+<div align="center">
+  <img src="./screenshots/terminal-1.webp" width="32%"/>
+  <img src="./screenshots/terminal-2.webp" width="32%"/>
+  <img src="./screenshots/terminal-3.webp" width="32%"/>
+</div>
+
 ## Dependencies
 
 ```
